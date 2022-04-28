@@ -1,14 +1,14 @@
 import { useState, createContext, useContext } from 'react';
 
-const UserContext = createContext();
+const SearchTextContext = createContext();
 
-export const useSearchTextContext = () => useContext(UserContext);
+export const useSearchTextContext = () => useContext(SearchTextContext);
 
 export function SearchTextProvider({ children }) {
   return (
-    <UserContext.Provider value={useSearchText()}>
+    <SearchTextContext.Provider value={useSearchText()}>
       {children}
-    </UserContext.Provider>
+    </SearchTextContext.Provider>
   );
 }
 

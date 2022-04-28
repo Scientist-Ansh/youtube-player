@@ -1,9 +1,6 @@
 import styled from 'styled-components';
 
-import { useState } from 'react';
 import { useSearchTextContext } from '../contexts/searchText';
-
-import SearchList from '../components/SearchList';
 
 const Container = styled.div`
   padding: 50px 40px;
@@ -25,12 +22,9 @@ const Layout = ({ children }) => {
   const searchText = useSearchTextContext();
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(e.target.search.value);
-    console.log('submit');
     searchText.setSearchText(e.target.search.value);
   }
 
-  console.log(searchText);
   return (
     <Container>
       <Form onSubmit={handleSubmit}>

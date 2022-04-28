@@ -13,7 +13,7 @@ const Container = styled.div`
   align-items: center;
   margin-top: 50px;
 `;
-const SingleVideo = ({ videoId }) => {
+const SingleVideo = () => {
   const searchText = useSearchTextContext();
 
   let urlParams = useParams();
