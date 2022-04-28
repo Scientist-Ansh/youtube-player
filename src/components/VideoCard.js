@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Card = styled.div`
   padding: 15px;
@@ -17,18 +17,26 @@ const CustomLink = styled(Link)`
   text-decoration: none;
 `;
 
-const VideoCard = ({ data }) => {
+const VideoCard = ({ data, type, handleAddVideo }) => {
+  let navigate = useNavigate();
   return (
-    <CustomLink to={`/video/${data.id.videoId}`}>
-      <Card>
-        <Image src={data.snippet.thumbnails.default.url} alt="thumbnail" />
-        <h3>{data.title}</h3>
-        <p>
-          <span>{data.views} views.</span>{' '}
-          <span>{data.snippet.publishedAt}</span>
-        </p>
-      </Card>
-    </CustomLink>
+    <Card onClick={() => navigate(`/video/${data.id.videoId}`)}>
+      <Image src={data.snippet.thumbnails.default.url} alt="thumbnail" />
+      <h3>{data.title}</h3>
+      <p>
+        <span>{data.views} views.</span> <span>{data.snippet.publishedAt}</span>
+      </p>
+      {type && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            handleAddVideo(data.id.videoId);
+          }}
+        >
+          Add to Playlist
+        </button>
+      )}
+    </Card>
   );
 };
 

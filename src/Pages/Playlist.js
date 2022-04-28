@@ -8,6 +8,7 @@ import { useSearchTextContext } from '../contexts/searchText';
 import SearchList from '../components/SearchList';
 import styled from 'styled-components';
 import PlaylistContainer from '../components/PlaylistContainer';
+import axios from 'axios';
 
 const Container = styled.div`
   display: flex;
@@ -33,8 +34,7 @@ const Playlist = () => {
   }, [data]);
 
   async function getVideos() {
-    console.log('');
-    // loop from data.videos and return a promise for each video
+    console.log(data, 'inside the get Videos function');
     const promises = data.videos.map((videoId) =>
       fetcher(`https://youtube.thorsteinsson.is/api/videos/${videoId}`)
     );
@@ -42,16 +42,61 @@ const Playlist = () => {
     setVideos(result);
   }
 
+  const handleAddVideo = async (videoId) => {
+    console.log(videoId);
+    const newVideos = [...data.videos, videoId];
+    // create a put request with featcher with newVideos
+    const response = await axios.put(
+      `https://youtube.thorsteinsson.is/api/playlists/${urlParams.playlistId}`,
+      {
+        name: data.name,
+        videos: newVideos,
+      }
+    );
+
+    console.log(response);
+    if (response.data.success) {
+      const newVideo = await fetcher(
+        `https://youtube.thorsteinsson.is/api/videos/${videoId}`
+      );
+      setVideos([...videos, newVideo]);
+    }
+  };
+
+  const handleRemoveVideo = async (videoId) => {
+    const newVideos = data.videos.filter((video) => video !== videoId);
+    // create a put request with featcher with newVideos
+    const response = await axios.put(
+      `https://youtube.thorsteinsson.is/api/playlists/${urlParams.playlistId}`,
+      {
+        name: data.name,
+        videos: newVideos,
+      }
+    );
+
+    if (response.data.success) {
+      setVideos(videos.filter((video) => video.videoId !== videoId));
+    }
+  };
+
   if (error) return <div>Error</div>;
   if (!data) return <div>Loading...</div>;
   console.log(data);
 
   return (
     <Container>
-      <PlaylistContainer name={data.name} data={videos} />
+      <PlaylistContainer
+        name={data.name}
+        data={videos}
+        handleRemoveVideo={handleRemoveVideo}
+      />
 
       {searchText.searchText && (
-        <SearchList searchText={searchText.searchText} />
+        <SearchList
+          searchText={searchText.searchText}
+          type="playlist"
+          handleAddVideo={handleAddVideo}
+        />
       )}
     </Container>
   );

@@ -11,7 +11,7 @@ const VideoList = styled.div`
   justify-content: center;
 `;
 
-const SearchList = ({ searchText }) => {
+const SearchList = ({ searchText, type, handleAddVideo }) => {
   const { data, error } = useSWR(
     `https://youtube.thorsteinsson.is/api/search?q=${searchText}`,
     fetcher
@@ -19,11 +19,15 @@ const SearchList = ({ searchText }) => {
 
   if (error) return <div>Error</div>;
   if (!data) return <div>Loading...</div>;
-  console.log(data);
   return (
     <VideoList>
       {data.map((video) => (
-        <VideoCard data={video} key={video.id.videoId} />
+        <VideoCard
+          data={video}
+          key={video.id.videoId + 'search'}
+          type={type}
+          handleAddVideo={handleAddVideo}
+        />
       ))}
     </VideoList>
   );

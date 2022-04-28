@@ -12,13 +12,16 @@ const Card = styled.div`
   max-width: 300px;
   min-width: 250px;
   cursor: pointer;
+  &:nth-child(1) {
+    margin-left: 100px;
+  }
 `;
 
 const Image = styled.img`
   width: 100%;
 `;
 
-const PlaylistContainer = ({ data, name }) => {
+const PlaylistContainer = ({ data, name, handleRemoveVideo }) => {
   console.log(data);
   return (
     <>
@@ -45,12 +48,17 @@ const PlaylistContainer = ({ data, name }) => {
       <h3>{name}</h3>
       <VideoList>
         {data.map((video) => (
-          <Card key={video.videoId}>
-            <Image src={video.thumbnailUrl} alt="thumbnail" />
-            <h3>{video.title}</h3>
-            <p>
-              <span>{video.views} views.</span>{' '}
-            </p>
+          <Card key={video.videoId + 'playlist'}>
+            <div>
+              <Image src={video.thumbnailUrl} alt="thumbnail" />
+              <h3>{video.title}</h3>
+              <p>
+                <span>{video.views} views.</span>{' '}
+              </p>
+            </div>
+            <button onClick={() => handleRemoveVideo(video.videoId)}>
+              Remove
+            </button>
           </Card>
         ))}
       </VideoList>
