@@ -35,6 +35,9 @@ const Playlist = () => {
 
   async function getVideos() {
     console.log(data, 'inside the get Videos function');
+    if (data && !data.videos) {
+      return;
+    }
     const promises = data.videos.map((videoId) =>
       fetcher(`https://youtube.thorsteinsson.is/api/videos/${videoId}`)
     );
@@ -55,7 +58,7 @@ const Playlist = () => {
     );
 
     console.log(response);
-    if (response.data.success) {
+    if (response.data.success === true) {
       const newVideo = await fetcher(
         `https://youtube.thorsteinsson.is/api/videos/${videoId}`
       );
@@ -85,6 +88,7 @@ const Playlist = () => {
 
   return (
     <Container>
+      <h2>{data && !data.videos && 'Cannot Load playlist'}</h2>
       <PlaylistContainer
         name={data.name}
         data={videos}
@@ -94,7 +98,7 @@ const Playlist = () => {
       {searchText.searchText && (
         <SearchList
           searchText={searchText.searchText}
-          type="playlist"
+          type={data.videos && 'playlist'}
           handleAddVideo={handleAddVideo}
         />
       )}

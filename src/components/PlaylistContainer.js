@@ -46,6 +46,12 @@ const PlaylistContainer = ({ data, name, handleRemoveVideo }) => {
       )}
 
       <h3>{name}</h3>
+      {data.length === 0 && (
+        <p>
+          No videos in this playlist. You can search and videos into your
+          playlist.
+        </p>
+      )}
       <VideoList>
         {data.map((video) => (
           <Card key={video.videoId + 'playlist'}>
